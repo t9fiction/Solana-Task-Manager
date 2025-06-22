@@ -1,16 +1,17 @@
-# 📝 Solana Notes dApp
 
-A full-stack decentralized note-taking application built on the **Solana blockchain** using **Anchor** and a modern **Next.js 14** frontend. It enables users to **create**, **update**, and **delete** personal notes stored directly on-chain using **Program Derived Addresses (PDAs)**.
+# ✅ Solana Task Manager dApp
+
+A full-stack decentralized task management application built on the **Solana blockchain** using **Anchor** and a modern **Next.js 14** frontend. It allows users to **create**, **update**, and **delete** their personal tasks stored directly on-chain via **Program Derived Addresses (PDAs)**.
 
 ---
 
 ## 🚀 Features
 
-- 📝 **Create, update, and delete** personal notes on Solana
-- 🔐 **Wallet integration** (Phantom, Solflare, etc.)
-- 📡 **Real-time blockchain interaction** with Anchor
-- 🎨 **Clean UI** using TailwindCSS + SweetAlert2
-- ⚙️ **TypeScript** support for both frontend and smart contract
+* ✅ **Create, update, and delete** tasks on Solana
+* 🔐 **Wallet integration** (Phantom, Solflare, etc.)
+* 📡 **Real-time blockchain interaction** using Anchor
+* 🎨 **Clean UI** with TailwindCSS + SweetAlert2
+* ⚙️ **Fully typed** with TypeScript (frontend + contract)
 
 ---
 
@@ -21,45 +22,46 @@ Written in Rust using the Anchor framework.
 ### 📜 Program ID
 
 ```rust
-declare_id!("H17VxY33ssugCtupfKJkNSawepVgh4RWsz7fk6CsCiA4");
-````
+declare_id!("8rwZJ58gyv2yY2eUanMYVWohBBLeSAguNDo736k2nDJf");
+```
 
-### 🧾 `Note` Account Structure
+### 🧾 `Task` Account Structure
 
 ```rust
 #[account]
 #[derive(InitSpace)]
-pub struct Note {
+pub struct Task {
     pub author: Pubkey,
     #[max_len(100)]
     pub title: String,
     #[max_len(1000)]
-    pub content: String,
+    pub description: String,
+    pub is_completed: bool,
     pub created_at: i64,
-    pub last_updated: i64,
 }
 ```
 
 ### 🔧 Instructions
 
-* **create\_note(title, content)**
-  Creates a new note. PDA: `["note", author_pubkey, title]`
+* **create\_task(title, description)**
+  Creates a new task for the connected wallet.
+  PDA: `["task", author_pubkey, title]`
 
-* **update\_note(content)**
-  Only the author can update the note content.
+* **update\_task(...)**
+  Allows updating task fields (e.g. mark as completed, edit title/description)
 
-* **delete\_note()**
-  Deletes and closes the note account.
+* **delete\_task()**
+  Deletes the task account, only callable by the author.
 
 ### ❗ Errors
 
 ```rust
 #[error_code]
-pub enum NotesError {
+pub enum ErrorTask {
     TitleTooLong,
-    ContentTooLong,
+    DescriptionTooLong,
     TitleIsEmpty,
-    ContentIsEmpty,
+    DescriptionIsEmpty,
     Unauthorized,
     TitleNotFound,
 }
@@ -88,7 +90,7 @@ pub enum NotesError {
 ├── components/         # UI components
 ├── constants/          # Program ID and IDL
 ├── lib/                # Helper functions (getProvider, getProgram)
-├── types/              # Shared TypeScript types (e.g., note.d.ts)
+├── types/              # Shared TypeScript types (e.g., task.d.ts)
 ├── styles/             # Tailwind config
 ├── solana/             # Anchor program (Rust code)
 ├── public/             # Static assets
@@ -103,13 +105,13 @@ pub enum NotesError {
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/t9fiction/Solana-crud-note
-cd solana-notes-dapp
+git clone https://github.com/t9fiction/Solana-Task-Manager
+cd solana-task-manager
 ```
 
 ### 2. Install Dependencies
 
-Run the following command to install required Solana + Anchor dependencies:
+Install Solana + Anchor related packages:
 
 ```bash
 npm install @project-serum/anchor \
@@ -120,23 +122,27 @@ npm install @project-serum/anchor \
             @solana/web3.js
 ```
 
-Also install:
+Also install frontend packages:
 
 ```bash
 npm install sweetalert2 tailwindcss postcss autoprefixer
 ```
 
-Then initialize Tailwind:
+Initialize TailwindCSS:
 
 ```bash
 npx tailwindcss init -p
 ```
 
-> Or simply run `npm install` if the `package.json` is already set up.
+> If `package.json` is preconfigured, just run:
+
+```bash
+npm install
+```
 
 ### 3. Set Up Environment Variables
 
-Create a `.env.local` file in the root:
+Create a `.env.local` file:
 
 ```env
 NEXT_PUBLIC_SOLANA_NETWORK=devnet
@@ -147,13 +153,13 @@ NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 
 ## 🧪 Running the App
 
-### Start Development Server
+### Start Dev Server
 
 ```bash
 npm run dev
 ```
 
-Go to `http://localhost:3000`
+Visit: `http://localhost:3000`
 
 ### Build for Production
 
@@ -166,10 +172,10 @@ npm run start
 
 ## 📦 Smart Contract Setup (Anchor)
 
-### 1. Navigate to contract folder
+### 1. Navigate to the Contract
 
 ```bash
-cd solana/notes_app
+cd solana/task_manager
 ```
 
 ### 2. Build & Deploy
@@ -179,7 +185,7 @@ anchor build
 anchor deploy
 ```
 
-Update `declare_id!` in `lib.rs` with the new program ID from deployment.
+Then, update `declare_id!` in `lib.rs` with the new deployed program ID.
 
 ---
 
@@ -194,7 +200,11 @@ Update `declare_id!` in `lib.rs` with the new program ID from deployment.
 
 ## 📸 Screenshots
 
-> You can add UI screenshots here showing the connected wallet, note creation form, and the on-chain display.
+> Add some UI screenshots showing:
+>
+> * Connected wallet
+> * Task creation form
+> * Task list with edit/delete actions
 
 ---
 
@@ -202,7 +212,7 @@ Update `declare_id!` in `lib.rs` with the new program ID from deployment.
 
 * [Anchor Book](https://book.anchor-lang.com/)
 * [Solana Docs](https://docs.solana.com/)
-* [Solana Wallet Adapter](https://github.com/solana-labs/wallet-adapter)
+* [Wallet Adapter](https://github.com/solana-labs/wallet-adapter)
 * [SweetAlert2](https://sweetalert2.github.io/)
 
 ---
@@ -215,17 +225,4 @@ MIT License © 2025 Sohail
 
 ## 🙌 Credits
 
-* Built with ❤️ by Sohail using Anchor, Solana, and modern frontend tooling.
-
-```
-
----
-
-Let me know if you want to:
-
-- Add **CI/CD instructions** (e.g., with GitHub Actions or Vercel)
-- Prepare for **Vercel deployment**
-- Include instructions for **custom devnet validator**
-- Add `note.d.ts` type in `/types` for reference
-
-Happy BUIDLing 🛠️⚡
+* Built by Sohail using Anchor, Solana, and modern full-stack tooling.
