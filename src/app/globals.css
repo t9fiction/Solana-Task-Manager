@@ -1,0 +1,45 @@
+@import "@solana/wallet-adapter-react-ui/styles.css";
+@import "tailwindcss";
+
+:root {
+  /* Light Mode Colors */
+  --background: #f9fafb; /* Neutral gray-50 */
+  --foreground: #111827; /* Neutral gray-900 */
+  --primary: #2563eb; /* Blue-600 */
+  --secondary: #6b7280; /* Gray-500 */
+  --accent: #14b8a6; /* Teal-500 */
+  --success: #059669; /* Green-600 */
+  --error: #dc2626; /* Red-600 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark Mode Colors */
+    --background: #111827; /* Neutral gray-900 */
+    --foreground: #f9fafb; /* Neutral gray-50 */
+    --primary: #3b82f6; /* Blue-500 */
+    --secondary: #9ca3af; /* Gray-400 */
+    --accent: #2dd4bf; /* Teal-400 */
+    --success: #10b981; /* Green-500 */
+    --error: #ef4444; /* Red-500 */
+  }
+}
+
+/* Theme variables for consistency */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
